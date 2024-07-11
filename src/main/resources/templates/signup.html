@@ -1,0 +1,40 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8" />
+<title>Signup Page</title>
+</head>
+
+<body>
+<section>
+ <div class="container">
+   <div class="row">
+      <div class="col-md-8 offset-md-2">
+      <div class="my-card mt-1">
+<!--       <div th:if="${session.message}" th:classappend="${session.message.type}" class="alert" role="alert"> -->
+<!--        <p th:text="${session.message.content}">Something went wrong!!</p> -->
+<!--        <th:block th:text="${#session.removeAttribute('message')}"></th:block> -->
+<!-- </div> -->
+      
+      <h1 class="text-center">SignUp Here!!</h1>
+      <form action="" th:action="@{/do_register}" method="post" th:object="${user}">
+       
+        <div class="form-group">
+    <label for="name_field">User Name</label>
+    <input type="text" name="user_name" class="form-control" id="name_field" aria-describedby="emailHelp" th:value="${user.user_name}" required>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
+  </div>
+  <div class="contaner text-center">
+  <button type="submit" class="btn bg-primary text-white">Submit</button>
+  </div>
+       
+      </form>
+       </div>
+      </div>
+</div>
+</div>
+ </section>
+</body>
+</html>

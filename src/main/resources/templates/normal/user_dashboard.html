@@ -1,0 +1,151 @@
+<!-- chart-and-content.html -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .chart-content {
+            margin-left: 18%; /* Adjust this value to match your sidebar width */
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .chart-container {
+            width: 48%;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script th:inline="javascript">
+        /* Your JavaScript code for creating charts goes here */
+        var userData = /*[[${userApplications}]]*/ [];
+        
+        var testVariable = /*[[${user}]]*/ 'Not Empty';
+        console.log('Test Variable:', testVariable);
+
+        // Processed data for pie chart
+        var pieChartData = {
+            labels: ['Received', 'Forwarded', 'Response', 'Syn'],
+            datasets: [{
+                data: [
+                    userData.filter(user => user.received_date != null).length,
+                    userData.filter(user => user.forwarded_date != null).length,
+                    userData.filter(user => user.respond_date != null).length,
+                    userData.filter(user => user.synk_date != null).length,
+                ],
+                backgroundColor: ['red', 'blue', 'green', 'orange'],
+            }],
+        };
+
+        // Processed data for bar graph
+        var barGraphData = {
+            labels: ['Received', 'Forwarded', 'Response', 'Syn'],
+            datasets: [{
+                label: 'Number of users',
+                data: [
+                    userData.filter(user => user.received_date != null).length,
+                    userData.filter(user => user.forwarded_date != null).length,
+                    userData.filter(user => user.respond_date != null).length,
+                    userData.filter(user => user.synk_date != null).length,
+                ],
+                backgroundColor: ['red', 'blue', 'green', 'orange'],
+            }],
+        };
+
+        // Processed data for line graph
+        var lineGraphData = {
+            labels: userData.map(user => user.app_id),
+            datasets: [{
+                label: 'Received Date',
+                data: userData.map(user => user.received_date),
+                borderColor: 'red',
+                fill: false,
+            }, {
+                label: 'Forwarded Date',
+                data: userData.map(user => user.forwarded_date),
+                borderColor: 'blue',
+                fill: false,
+            }, {
+                label: 'Response Date',
+                data: userData.map(user => user.respond_date),
+                borderColor: 'green',
+                fill: false,
+            }, {
+                label: 'Syn Date',
+                data: userData.map(user => user.synk_date),
+                borderColor: 'orange',
+                fill: false,
+            }],
+        };
+
+        // Create pie chart
+        var pieChartCanvas = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieChartCanvas, {
+            type: 'pie',
+            data: pieChartData,
+        });
+
+        // Create a bar graph
+        var barGraphCanvas = document.getElementById('barGraph').getContext('2d');
+        new Chart(barGraphCanvas, {
+            type: 'bar',
+            data: barGraphData,
+        });
+
+        // Create a line graph
+        var lineGraphCanvas = document.getElementById('lineGraph').getContext('2d');
+        new Chart(lineGraphCanvas, {
+            type: 'line',
+            data: lineGraphData,
+        });
+    </script>
+</head>
+
+<body>
+<section>
+ <div class="chart-content">
+        <h1>User Dashboard page</h1>
+        <h1>User Name<span th:text="${user.user_name}"></span></h1>
+        <h1>User Role<span th:text="${user.role}"></span></h1>
+        <h1><a th:href="@{/logout}">Logout</a></h1>
+    </div>
+ <div class="main-content">
+            <div class="chart-container">
+                <canvas id="pieChart" width="300" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="barGraph" width="300" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="lineGraph" width="300" height="300"></canvas>
+            </div>
+        </div>
+ </section>
+</body>
+</html>
